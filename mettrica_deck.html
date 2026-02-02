@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>METTRICA - Apresentação Corporativa</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Inter:wght@300;400;600&family=Space+Grotesk:wght@300;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#1d3a5b',     /* Azul Marinho - Base */
+                        petrol: '#13576d',   /* Azul Petróleo */
+                        teal: '#399192',     /* Verde Água Técnico */
+                        orange: '#db6218',   /* Laranja Construção */
+                        beige: '#eae1d6',    /* Bege Areia */
+                        white: '#ffffff',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Archivo', 'sans-serif'],
+                        mono: ['Space Grotesk', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0f1216;
+            /* Dark outer background */
+            margin: 0;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #db6218;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            mix-blend-mode: normal;
+        }
+
+        #stage {
+            width: 1920px;
+            height: 1080px;
+            background: #eae1d6;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transform-origin: center center;
+            overflow: hidden;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Slide Transitions */
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: scale(1.1);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+            z-index: 10;
+        }
+
+        /* Typography */
+        .h-mega {
+            font-family: 'Archivo', sans-serif;
+            font-size: 180px;
+            line-height: 0.85;
+            letter-spacing: -0.04em;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .h-large {
+            font-family: 'Archivo', sans-serif;
+            font-size: 80px;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        /* 3D Card Effect */
+        .card-3d {
+            transition: transform 0.1s;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Grid Backgrounds */
+        .grid-bg-navy {
+            background-image:
+                linear-gradient(rgba(29, 58, 91, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(29, 58, 91, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .grid-bg-white {
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="custom-cursor"></div>
+
+    <div id="wrapper">
+        <div id="stage">
+
+            <!-- Logo (Top Left) -->
+            <div class="absolute top-12 left-12 z-50">
+                <img src="https://storage.googleapis.com/msgsndr/qRGJ0RFX9qNN90OhtGnB/media/697e72091f68d126bd93ef7c.png"
+                    alt="Mettrica Logo" class="h-28 w-auto object-contain">
+            </div>
+
+            <!-- Fullscreen Button (Top Right) -->
+            <button id="fs-btn"
+                class="absolute top-12 right-12 z-50 bg-white/10 hover:bg-white/20 border border-white/20 p-4 rounded-2xl transition-all group">
+                <i data-lucide="maximize" class="w-8 h-8 text-white group-hover:scale-110 transition-transform"></i>
+            </button>
+
+            <!-- Global Nav/Progress (Bottom Right) -->
+            <div class="absolute bottom-12 right-12 z-50 flex flex-col items-end text-navy mix-blend-difference">
+                <span id="slide-ind" class="font-mono font-bold text-6xl opacity-50 text-white">01</span>
+                <div class="h-2 w-32 bg-white/20 mt-3 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-orange w-[20%] transition-all duration-500"></div>
+                </div>
+            </div>
+
+            <!-- SLIDE 1: INTRO (Bege Background) -->
+            <div class="slide active bg-beige text-navy flex items-center justify-center overflow-hidden">
+                <div class="absolute inset-0 grid-bg-navy opacity-40 parallax" data-speed="20"></div>
+
+                <!-- Huge Background Text (Decorative) -->
+                <div class="absolute inset-0 flex items-center justify-center opacity-[0.04] select-none pointer-events-none parallax"
+                    data-speed="5">
+                    <span class="h-mega text-center leading-none text-navy">PRECISION<br>ENGINEERING</span>
+                </div>
+
+                <div class="relative z-20 text-center max-w-[1400px]">
+                    <h1 class="h-mega mb-8 parallax text-navy scale-y-110 tracking-tighter" data-speed="10">
+                        METTRICA<span class="text-orange">.</span>
+                    </h1>
+                </div>
+            </div>
+
+            <!-- SLIDE 2: THE CALCULATION (Visual Equation) -->
+            <div
+                class="slide bg-navy text-white flex flex-col items-center justify-evenly overflow-hidden w-full h-full">
+                <!-- Background Grid -->
+                <div class="absolute inset-0 grid-bg-white opacity-10 parallax" data-speed="10"></div>
+
+                <!-- TITLE -->
+                <div class="relative z-20 text-center shrink-0 mt-8">
+                    <span
+                        class="text-teal font-mono font-bold uppercase tracking-[0.4em] text-xl bg-navy/80 px-8 py-3 rounded-full border border-teal/20 backdrop-blur-xl shadow-2xl">
+                        A Lógica do Valor
+                    </span>
+                </div>
+
+                <!-- TOP ROW: FACTORS -->
+                <div class="flex items-center justify-center gap-12 relative z-10 w-full px-10">
+
+                    <!-- Card 1: Base Price -->
+                    <div
+                        class="w-[600px] bg-petrol/40 border border-white/10 rounded-[3rem] p-10 text-center card-3d shadow-xl relative group hover:bg-petrol/60 transition-all">
+                        <div
+                            class="inline-block bg-teal/20 text-teal font-bold px-6 py-2 rounded-full text-base uppercase tracking-widest mb-6 border border-teal/20">
+                            Valor Base (MCMV)
+                        </div>
+
+                        <div class="flex items-baseline justify-center gap-3 mb-2">
+                            <span class="text-3xl text-teal font-bold align-top mt-2">R$</span>
+                            <span
+                                class="text-[80px] font-display font-black text-white leading-none tracking-tighter">1.830</span>
+                        </div>
+                        <p class="text-gray-400 font-mono text-base uppercase tracking-wider">Por Metro Quadrado</p>
+                    </div>
+
+                    <!-- Multiplier X -->
+                    <div class="text-orange text-[80px] font-black drop-shadow-2xl opacity-80 shrink-0">×</div>
+
+                    <!-- Card 2: Area -->
+                    <div
+                        class="w-[600px] bg-petrol/40 border border-white/10 rounded-[3rem] p-10 text-center card-3d shadow-xl relative group hover:bg-petrol/60 transition-all">
+                        <div
+                            class="inline-block bg-orange/20 text-orange font-bold px-6 py-2 rounded-full text-base uppercase tracking-widest mb-6 border border-orange/20">
+                            Área Construída
+                        </div>
+
+                        <div class="flex items-baseline justify-center gap-3 mb-2">
+                            <span
+                                class="text-[80px] font-display font-black text-white leading-none tracking-tighter">2.734</span>
+                            <span class="text-3xl text-orange font-bold">m²</span>
+                        </div>
+                        <p class="text-gray-400 font-mono text-base uppercase tracking-wider">Total do Projeto</p>
+                    </div>
+                </div>
+
+                <!-- EQUALS INDICATOR -->
+                <div class="shrink-0 -my-4">
+                    <i data-lucide="arrow-down" class="w-16 h-16 text-teal animate-bounce opacity-80"></i>
+                </div>
+
+                <!-- BOTTOM ROW: RESULT -->
+                <div
+                    class="w-[900px] bg-white text-navy rounded-[3rem] px-12 py-10 text-center card-3d shadow-[0_0_80px_rgba(255,255,255,0.15)] relative overflow-hidden transform hover:scale-[1.02] transition-transform duration-500 mb-8">
+                    <!-- Gradient Bg -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-white via-beige to-white opacity-90"></div>
+
+                    <div class="relative z-10 flex flex-col items-center">
+                        <p class="text-petrol font-mono uppercase font-bold text-sm tracking-[0.5em] mb-4">Valor Total
+                            de Portfólio</p>
+
+                        <div class="flex items-baseline justify-center gap-4 border-orange/10">
+                            <span class="text-4xl font-bold text-orange">R$</span>
+                            <span
+                                class="text-[120px] font-display font-black leading-none text-navy tracking-tighter">5.004.684</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 3: PROBLEM (Market Cost) -->
+            <div
+                class="slide bg-navy text-white flex flex-col items-center justify-center overflow-hidden w-full h-full">
+                <div class="absolute inset-0 grid-bg-white opacity-10"></div>
+                <div class="relative z-10 w-full max-w-7xl px-8 flex flex-col items-center">
+                    <span
+                        class="text-orange font-mono font-bold uppercase tracking-[0.3em] bg-orange/10 px-8 py-3 rounded-full border border-orange/20 mb-12">
+                        O Custo do Mercado
+                    </span>
+                    <div
+                        class="w-full max-w-4xl bg-white/5 border border-white/10 rounded-[3rem] p-16 backdrop-blur-sm relative overflow-hidden group">
+                        <div
+                            class="absolute top-0 right-0 bg-red-500/20 text-red-500 font-bold px-10 py-4 rounded-bl-3xl text-sm uppercase tracking-widest border-b border-l border-red-500/20">
+                            Convencional
+                        </div>
+                        <div class="flex items-center gap-8 mb-16">
+                            <div class="w-24 h-24 bg-white/10 rounded-3xl flex items-center justify-center">
+                                <i data-lucide="shopping-cart" class="w-12 h-12 text-gray-300"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-5xl font-bold text-white mb-2">Treliça Pré-moldada</h2>
+                                <p class="text-gray-400 text-xl">Compra do material pronto (Sem gestão)</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-16 mb-16">
+                            <div class="flex flex-col border-b border-white/10 pb-6">
+                                <span class="text-gray-400 font-mono text-base uppercase mb-2">Custo Unitário</span>
+                                <span class="text-5xl font-bold text-white">R$ 12,00 <span
+                                        class="text-2xl font-normal text-gray-500">/m</span></span>
+                            </div>
+                            <div class="flex flex-col border-b border-white/10 pb-6">
+                                <span class="text-gray-400 font-mono text-base uppercase mb-2">Quantidade</span>
+                                <span class="text-5xl text-white">270 metros</span>
+                            </div>
+                        </div>
+                        <div class="bg-red-500/10 rounded-[2rem] p-10 border border-red-500/20 text-center">
+                            <p class="text-red-300 font-mono text-sm uppercase tracking-widest mb-4">Custo Total
+                                (Compra)</p>
+                            <div class="text-8xl font-black text-white">R$ 3.240<span
+                                    class="text-4xl text-red-400">,00</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 4: SOLUTION (Mettrica Method) -->
+            <div
+                class="slide bg-navy text-white flex flex-col items-center justify-center overflow-hidden w-full h-full">
+                <div
+                    class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-teal/10 via-navy to-navy">
+                </div>
+                <div class="absolute inset-0 grid-bg-white opacity-10"></div>
+                <div class="relative z-10 w-full max-w-7xl px-8 flex flex-col items-center">
+                    <span
+                        class="text-teal font-mono font-bold uppercase tracking-[0.3em] bg-teal/10 px-8 py-3 rounded-full border border-teal/20 mb-8">
+                        A Solução Mettrica
+                    </span>
+                    <div
+                        class="w-full max-w-5xl bg-teal/10 border border-teal/30 rounded-[3rem] p-12 backdrop-blur-md relative overflow-hidden shadow-[0_0_100px_rgba(20,184,166,0.15)]">
+                        <div
+                            class="absolute top-0 right-0 bg-teal text-navy font-bold px-10 py-3 rounded-bl-3xl text-sm uppercase tracking-widest shadow-lg">
+                            Execução In Loco
+                        </div>
+                        <div class="flex items-center gap-8 mb-10">
+                            <div class="w-24 h-24 bg-teal/20 rounded-3xl flex items-center justify-center">
+                                <i data-lucide="hammer" class="w-12 h-12 text-teal"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-5xl font-bold text-white mb-2">Produção Própria</h2>
+                                <p class="text-teal text-xl">Gestão eficiente de insumos e mão de obra</p>
+                            </div>
+                        </div>
+
+                        <!-- Breakdown and Total Row -->
+                        <div class="flex gap-12 items-start mb-10">
+                            <!-- Left: List -->
+                            <div class="flex-1 bg-navy/40 rounded-3xl p-8 border border-teal/10">
+                                <p
+                                    class="text-teal/70 font-mono text-sm uppercase tracking-widest border-b border-teal/10 pb-4 mb-4">
+                                    Insumos para 270m</p>
+                                <div class="space-y-4">
+                                    <div class="flex justify-between text-xl"><span class="text-gray-300">Cimento (7
+                                            sc)</span>
+                                        <span class="text-white font-mono">R$ 273,00</span>
+                                    </div>
+                                    <div class="flex justify-between text-xl"><span class="text-gray-300">Areia
+                                            (0.5m³)</span>
+                                        <span class="text-white font-mono">R$ 55,00</span>
+                                    </div>
+                                    <div class="flex justify-between text-xl"><span class="text-gray-300">Treliça
+                                            4.2mm</span>
+                                        <span class="text-white font-mono">R$ 1.012,00</span>
+                                    </div>
+                                    <div class="flex justify-between text-xl"><span class="text-gray-300">Brita Zero
+                                            (0.6m³)</span>
+                                        <span class="text-white font-mono">R$ 75,00</span>
+                                    </div>
+                                    <div class="flex justify-between text-xl border-t border-white/10 pt-4"><span
+                                            class="text-gray-300">Mão de Obra</span> <span
+                                            class="text-white font-mono">R$ 42,00</span></div>
+                                </div>
+                            </div>
+                            <!-- Right: Unit Cost -->
+                            <div class="w-[300px] flex flex-col justify-center py-4">
+                                <p class="text-gray-400 font-mono text-center uppercase tracking-widest mb-2">Custo
+                                    Unitário Real</p>
+                                <div class="text-center">
+                                    <span class="text-6xl font-bold text-white block">R$ 5,39</span>
+                                    <span class="text-gray-500 text-lg">por metro</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total and Savings -->
+                        <div class="flex items-stretch gap-6">
+                            <div
+                                class="flex-1 bg-teal/20 rounded-3xl p-6 border border-teal/30 flex flex-col justify-center items-center">
+                                <p class="text-teal font-mono text-sm uppercase tracking-widest mb-2">Custo Total
+                                    (Produção)</p>
+                                <div class="text-7xl font-black text-white">R$ 1.457<span
+                                        class="text-4xl text-teal">,50</span></div>
+                            </div>
+                            <div
+                                class="w-[300px] bg-green-500 text-white rounded-3xl p-6 flex flex-col justify-center items-center shadow-lg animate-pulse">
+                                <p class="font-bold text-navy/60 uppercase tracking-widest text-xs mb-1">Economia Real
+                                </p>
+                                <div class="text-5xl font-black">45%</div>
+                                <div class="text-sm font-bold text-navy/60 uppercase mt-1">Mais Barato</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 5: METHODOLOGY (Cards on Beige) -->
+            <div class="slide bg-beige text-navy flex flex-col justify-center px-24">
+                <div class="text-center mb-24 parallax" data-speed="5">
+                    <span class="text-orange font-mono font-bold uppercase tracking-widest mb-4 block">Como
+                        Entregamos Esse Valor?</span>
+                    <h2 class="h-large text-petrol">Tríade de Execução</h2>
+                </div>
+
+                <div class="flex justify-center gap-10 mt-10">
+                    <!-- Pillar 1 -->
+                    <div
+                        class="w-[450px] bg-white shadow-2xl border-t-8 border-navy p-12 flex flex-col justify-between card-3d hover:-translate-y-4 transition-transform duration-500 group">
+                        <div
+                            class="w-20 h-20 bg-navy/10 rounded-2xl flex items-center justify-center mb-10 group-hover:bg-navy group-hover:text-white transition-colors duration-500">
+                            <i data-lucide="map-pin" class="w-10 h-10 text-navy group-hover:text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-4xl font-display font-bold mb-6 text-navy">Localização</h3>
+                            <p class="text-lg text-petrol/70 leading-relaxed">
+                                Análise técnica de vetores de crescimento. Onde o m² vale mais hoje e valerá
+                                o
+                                dobro
+                                amanhã.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Pillar 2 -->
+                    <div
+                        class="w-[450px] bg-white shadow-2xl border-t-8 border-orange p-12 flex flex-col justify-between card-3d hover:-translate-y-4 transition-transform duration-500 group">
+                        <div
+                            class="w-20 h-20 bg-orange/10 rounded-2xl flex items-center justify-center mb-10 group-hover:bg-orange group-hover:text-white transition-colors duration-500">
+                            <i data-lucide="clock" class="w-10 h-10 text-orange group-hover:text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-4xl font-display font-bold mb-6 text-navy">Prazo</h3>
+                            <p class="text-lg text-petrol/70 leading-relaxed">
+                                Cronogramas travados. O tempo é o maior corrosivo do ROI na construção
+                                civil.
+                                Nós o
+                                controlamos.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Pillar 3 -->
+                    <div
+                        class="w-[450px] bg-white shadow-2xl border-t-8 border-teal p-12 flex flex-col justify-between card-3d hover:-translate-y-4 transition-transform duration-500 group">
+                        <div
+                            class="w-20 h-20 bg-teal/10 rounded-2xl flex items-center justify-center mb-10 group-hover:bg-teal group-hover:text-white transition-colors duration-500">
+                            <i data-lucide="shield-check" class="w-10 h-10 text-teal group-hover:text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-4xl font-display font-bold mb-6 text-navy">Garantia</h3>
+                            <p class="text-lg text-petrol/70 leading-relaxed">
+                                Materiais certificados e processos com tripla conferência. Segurança jurídica e
+                                técnica.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 6: CONTACT (Navy/Orange) -->
+            <div class="slide bg-navy text-white flex items-center justify-center">
+                <div class="absolute inset-0 bg-petrol opacity-20 grid-bg-white"></div>
+
+                <div
+                    class="text-center relative z-10 p-24 bg-navy/90 backdrop-blur-xl border border-white/10 rounded-[60px] shadow-2xl max-w-6xl w-full hover-trigger group">
+                    <div
+                        class="absolute -top-20 left-1/2 -translate-x-1/2 w-40 h-40 bg-white rounded-full flex items-center justify-center shadow-2xl border-[10px] border-navy">
+                        <img src="https://storage.googleapis.com/msgsndr/qRGJ0RFX9qNN90OhtGnB/media/697e71f61fd827056633b94b.png"
+                            alt="Logo" class="h-24 w-auto object-contain">
+                    </div>
+
+                    <h2 class="h-mega tracking-tighter mb-8 mt-12">
+                        OBRIGADO<span class="text-orange">.</span>
+                    </h2>
+
+                    <div class="flex justify-center gap-20 mt-16 text-left border-t border-white/10 pt-16">
+                        <div class="group cursor-pointer hover:scale-110 transition-transform">
+                            <div class="flex items-center gap-4 mb-2">
+                                <div class="p-3 bg-orange/20 rounded-full"><i data-lucide="phone"
+                                        class="text-orange"></i></div>
+                                <span class="font-mono text-sm uppercase tracking-widest text-teal">WhatsApp</span>
+                            </div>
+                            <span class="block text-4xl font-bold">+55 83 99393-9342</span>
+                        </div>
+                    </div>
+
+                    <a href="https://www.instagram.com/mettrica_construcoes/" target="_blank"
+                        class="inline-block mt-20 bg-orange text-white px-20 py-8 rounded-full font-bold text-2xl uppercase tracking-widest hover:bg-white hover:text-navy transition-all transform hover:scale-105 shadow-[0_10px_40px_rgba(219,98,24,0.4)]">
+                        Siga no Instagram
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. RESOLUTION SCALER ---
+        const stage = document.getElementById('stage');
+        function resize() {
+            var scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+            stage.style.transform = 'translate(-50%, -50%) scale(' + scale + ')';
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // --- 2. CUSTOM CURSOR & PARALLAX ---
+        const cursor = document.getElementById('custom-cursor');
+        const parallaxItems = document.querySelectorAll('.parallax');
+        const cards3d = document.querySelectorAll('.card-3d');
+
+        document.addEventListener('mousemove', (e) => {
+            // Move Cursor
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+
+            // Parallax
+            const x = (e.clientX - window.innerWidth / 2);
+            const y = (e.clientY - window.innerHeight / 2);
+
+            parallaxItems.forEach(item => {
+                const speed = item.getAttribute('data-speed') || 20;
+                item.style.transform = `translate(${x / speed}px, ${y / speed}px)`;
+            });
+
+            // 3D Tilt
+            cards3d.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                if (e.clientX > rect.left - 100 && e.clientX < rect.right + 100 &&
+                    e.clientY > rect.top - 100 && e.clientY < rect.bottom + 100) {
+                    const cardX = e.clientX - rect.left - rect.width / 2;
+                    const cardY = e.clientY - rect.top - rect.height / 2;
+                    card.style.transform = `rotateY(${cardX / 40}deg) rotateX(${-cardY / 40}deg) translateZ(20px)`;
+                } else {
+                    card.style.transform = `rotateY(0) rotateX(0) translateZ(0)`;
+                }
+            });
+        });
+
+        // Hover expand cursor
+        document.querySelectorAll('a, button, .hover-trigger, .card-3d').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.width = '60px';
+                cursor.style.height = '60px';
+                cursor.style.backgroundColor = 'rgba(219, 98, 24, 0.2)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.width = '20px';
+                cursor.style.height = '20px';
+                cursor.style.backgroundColor = 'transparent';
+            });
+        });
+
+        // --- 3. SLIDESHOW ---
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const slideInd = document.getElementById('slide-ind');
+        const progressBar = document.getElementById('progress-bar');
+
+        lucide.createIcons();
+
+        function updateSlide(dir) {
+            const next = currentSlide + dir;
+            if (next >= 0 && next < slides.length) {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = next;
+                slides[currentSlide].classList.add('active');
+
+                slideInd.innerText = `0${currentSlide + 1}`;
+                progressBar.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') updateSlide(1);
+            if (e.key === 'ArrowLeft') updateSlide(-1);
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            // Ignore clicks on links or buttons
+            if (e.target.closest('a, button, #fs-btn')) return;
+
+            if (e.clientX > window.innerWidth / 2) updateSlide(1);
+            else updateSlide(-1);
+        });
+
+        // Fullscreen Logic
+        const fsBtn = document.getElementById('fs-btn');
+        fsBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+                fsBtn.querySelector('i').setAttribute('data-lucide', 'minimize');
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    fsBtn.querySelector('i').setAttribute('data-lucide', 'maximize');
+                }
+            }
+            lucide.createIcons();
+        });
+
+    </script>
+</body>
+
+</html>
+```
